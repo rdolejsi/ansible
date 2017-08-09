@@ -177,7 +177,7 @@ from ansible.module_utils._text import to_native, to_bytes, to_text
 from ansible.module_utils.parsing.convert_bool import BOOLEANS, BOOLEANS_FALSE, BOOLEANS_TRUE, boolean
 
 # datetime format used by touch on unix, here utilized by file/copy/template Ansible modules
-TOUCH_DATETIME_FORMAT="%Y%m%d%H%M.%S"
+TOUCH_DATETIME_FORMAT = "%Y%m%d%H%M.%S"
 
 PASSWORD_MATCH = re.compile(r'^(?:.+[-_\s])?pass(?:[-_\s]?(?:word|phrase|wrd|wd)?)(?:[-_\s].+)?$', re.I)
 
@@ -923,8 +923,8 @@ class AnsibleModule(object):
         mode = params.get('mode', None)
         owner = params.get('owner', None)
         group = params.get('group', None)
-        atime  = params.get('atime', None)
-        mtime  = params.get('mtime', None)
+        atime = params.get('atime', None)
+        mtime = params.get('mtime', None)
 
         # selinux related options
         seuser = params.get('seuser', None)
@@ -1458,15 +1458,17 @@ class AnsibleModule(object):
                 return True
             try:
                 # self.fail_json(path=path, msg='touching with atime {}, mtime {}'.format(atime, mtime), details='')
-                os.utime(path, (time.mktime(time.strptime(atime,TOUCH_DATETIME_FORMAT)), time.mktime(time.strptime(mtime,TOUCH_DATETIME_FORMAT))))
-            except OSError, e:
+                os.utime(path, (time.mktime(time.strptime(atime, TOUCH_DATETIME_FORMAT)), time.mktime(time.strptime(mtime, TOUCH_DATETIME_FORMAT))))
+            except OSError:
+                e = get_exception()
                 if os.path.islink(path) and e.errno == errno.EPERM:  # Can't set time on symbolic links
                     pass
-                elif e.errno == errno.ENOENT: # Can't set time on broken symbolic links
+                elif e.errno == errno.ENOENT:  # Can't set time on broken symbolic links
                     pass
                 else:
                     raise e
-            except Exception, e:
+            except Exception:
+                e = get_exception()
                 self.fail_json(path=path, msg='touch failed', details=str(e))
 
             # we won't be detecting changes on atime as we are interested in write-only changes

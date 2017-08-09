@@ -276,7 +276,7 @@ def main():
             local_follow=dict(type='bool'),
             atime=dict(type='raw'),
             mtime=dict(type='raw'),
-            archive=dict(type='bool') # Dissolved into other parameters before delegation to remote host
+            archive=dict(type='bool')  # Dissolved into other parameters before delegation to remote host
         ),
         add_file_common_args=True,
         supports_check_mode=True,

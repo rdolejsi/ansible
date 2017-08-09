@@ -249,7 +249,7 @@ class ActionModule(ActionBase):
             source_stat = os.stat(source_full)
             new_module_args.update(
                 dict(
-                    mode=oct(source_stat.st_mode & 0777),
+                    mode=oct(source_stat.st_mode & 0o777),
                     owner=str(source_stat.st_uid),
                     group=str(source_stat.st_gid),
                     mtime=time.strftime(TOUCH_DATETIME_FORMAT, time.localtime(source_stat.st_mtime)),
