@@ -81,6 +81,12 @@ options:
         if the destination does not exist.
     type: bool
     default: 'yes'
+  archive:
+    description:
+      - When set to true, the created file retains permissions and ownership of the source template file.
+    required: false
+    default: ""
+    version_added: "2.4"
 notes:
   - For Windows you can use M(win_template) which uses '\r\n' as C(newline_sequence).
   - Including a string that uses a date in the template will result in the template being marked 'changed' each time
