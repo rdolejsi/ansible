@@ -9,6 +9,7 @@ import os
 import shutil
 import stat
 import tempfile
+import time
 
 from ansible import constants as C
 from ansible.config.manager import ensure_type
@@ -39,6 +40,7 @@ class ActionModule(ActionBase):
         force = boolean(self._task.args.get('force', True), strict=False)
         follow = boolean(self._task.args.get('follow', False), strict=False)
         state = self._task.args.get('state', None)
+        archive = boolean(self._task.args.get('archive', False), strict=False)
         newline_sequence = self._task.args.get('newline_sequence', self.DEFAULT_NEWLINE_SEQUENCE)
         variable_start_string = self._task.args.get('variable_start_string', None)
         variable_end_string = self._task.args.get('variable_end_string', None)
@@ -96,7 +98,7 @@ class ActionModule(ActionBase):
                     raise AnsibleActionFail(to_text(e))
 
             mode = self._task.args.get('mode', None)
-            if mode == 'preserve':
+            if mode == 'preserve' or archive is True:
                 mode = '0%03o' % stat.S_IMODE(os.stat(source).st_mode)
 
             # Get vault decrypted tmp file
@@ -166,6 +168,8 @@ class ActionModule(ActionBase):
             new_task.args.pop('trim_blocks', None)
             new_task.args.pop('lstrip_blocks', None)
             new_task.args.pop('output_encoding', None)
+            # we need to remove archive - copy would re-execute it with local transferred string in mind rather than source
+            new_task.args.pop('archive', None)
 
             local_tempdir = tempfile.mkdtemp(dir=C.DEFAULT_LOCAL_TMP)
 

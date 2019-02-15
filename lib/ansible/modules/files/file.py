@@ -846,6 +846,9 @@ def main():
             state=dict(type='str', choices=['absent', 'directory', 'file', 'hard', 'link', 'touch']),
             path=dict(type='path', required=True, aliases=['dest', 'name']),
             _original_basename=dict(type='str'),  # Internal use only, for recursive ops
+            archive=dict(type='bool',required=False), # Internal use only, delegated here (see template)
+            atime=dict(required=False),
+            mtime=dict(required=False),
             recurse=dict(type='bool', default=False),
             force=dict(type='bool', default=False),  # Note: Should not be in file_common_args in future
             follow=dict(type='bool', default=True),  # Note: Different default than file_common_args

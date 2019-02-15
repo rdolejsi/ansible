@@ -25,6 +25,7 @@ import os
 import os.path
 import stat
 import tempfile
+import time
 import traceback
 
 from ansible import constants as C
@@ -246,7 +247,7 @@ class ActionModule(ActionBase):
         # Get the local mode and set if user wanted it preserved
         # https://github.com/ansible/ansible-modules-core/issues/1124
         lmode = None
-        if self._task.args.get('mode', None) == 'preserve':
+        if self._task.args.get('mode', None) == 'preserve' or boolean(self._task.args.get('archive', False)) is True:
             lmode = '0%03o' % stat.S_IMODE(os.stat(source_full).st_mode)
 
         # This is kind of optimization - if user told us destination is

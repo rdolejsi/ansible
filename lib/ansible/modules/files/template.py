@@ -119,6 +119,13 @@ options:
     type: str
     default: utf-8
     version_added: '2.7'
+    default: 'yes'
+  archive:
+    description:
+      - When set to true, the created file retains permissions and ownership of the source template file.
+    required: false
+    default: ""
+    version_added: "2.4"
 notes:
 - Including a string that uses a date in the template will result in the template being marked 'changed' each time.
 - Since Ansible 0.9, templates are loaded with C(trim_blocks=True).
